@@ -1,0 +1,16 @@
+node_modules
+dist
+build
+.venv
+.cache
+.parcel-cache
+.devbox
+.git
+.gitignore
+.env
+*.log
+.vscode
+.idea
+Dockerfile
+.dockerignore
+README.md
