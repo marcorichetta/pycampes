@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment-no-spot
+  labels:
+    app: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      volumes:
+      - name: nginx-pv-storage
+        persistentVolumeClaim:
+          claimName: nginx-pvc
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        env:
+          - name: NGINX_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: nginx-config
+                key: NGINX_PORT
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+        volumeMounts:
+          - mountPath: /tmp
+            name: nginx-pv-storage
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 50
+            preference:
+              matchExpressions:
+              - key: webserver
+                operator: In
+                values:
+                - "true"

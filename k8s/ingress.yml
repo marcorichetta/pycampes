@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress # Capa 7
+metadata:
+  name: minimal-ingress
+spec:
+  tls:
+  - hosts:
+      - richi.localhost
+    secretName: testsecret-tls
+  rules:
+  - host: internal.richi.localhost
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-service
+            port:
+              number: 8080
+  - host: richi.localhost
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx-service
+            port:
+              number: 8080
