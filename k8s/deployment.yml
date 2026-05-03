@@ -21,7 +21,7 @@ spec:
           claimName: nginx-pvc
       containers:
       - name: nginx
-        image: nginx:1.14.2
+        image: ttl.sh/pycampes:2h
         env:
           - name: NGINX_PORT
             valueFrom:
